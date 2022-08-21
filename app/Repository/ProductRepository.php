@@ -4,7 +4,6 @@ namespace App\Repository;
 use App\Models\Product;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Http\Resources\ProductResource;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductRepository implements ProductRepositoryInterface {
 
@@ -26,14 +25,14 @@ class ProductRepository implements ProductRepositoryInterface {
        return Product::destroy($id);
     }
 
-    public function createProduct(array $products, $category,  array $image,) 
+    public function createProduct(array $products, $image, $category) 
     {
-        return Product::create($products,$image, $category );
+        return Product::create($products, $image, $category);
     }
 
-    public function updateProduct($id, array $products) 
+    public function updateProduct($id, array $products, $image, $category) 
     {
-        return Product::whereId($id)->update($products);
+        return Product::whereId($id)->update($products, $image, $category);
     }
 
 }

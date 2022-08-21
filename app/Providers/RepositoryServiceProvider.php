@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
 use App\Repository\ProductRepository;
 use App\Repository\CategoryRepository;
-use Illuminate\Support\ServiceProvider;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Interfaces\CategoryRepositoryInterface;
 

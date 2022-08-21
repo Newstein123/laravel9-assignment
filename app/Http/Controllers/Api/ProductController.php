@@ -29,7 +29,7 @@ class ProductController extends Controller
 
     public function store(ProductStoreRequest $request)
     {      
-        $product = App\Models\Product::class;
+        $product = Product::all();
         $products = $request->only(
             [
                 'name',
@@ -39,13 +39,13 @@ class ProductController extends Controller
                 'quantity',
             ]
         );
-        // $file = $request->file('image');
-        // $path = $file->store('/upload/images');
-        // $image = $product->images()->create([
-        //     'path' => $path,
-        // ]);
-        // $categoryId = $request->categoryIds;
-        // $category = $product->categories()->attach($categoryId);
+        $file = $request->file('image');
+        $path = $file->store('/upload/images');
+        $image = $product->images()->create([
+            'path' => $path,
+        ]);
+        $categoryId = $request->categoryIds;
+        $category = $product->categories()->attach($categoryId);
 
         return response()->json(
             [

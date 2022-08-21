@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
@@ -17,7 +16,7 @@ class CategoryController extends Controller
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function index()
+    public function index() 
     {
        return response()->json([
         'data' => $this->categoryRepository->getAllCategory(),
@@ -25,25 +24,23 @@ class CategoryController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $category = Category::create([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'description' => $request->description,
+    {   
+        $category  = request()->only([
+            'name',
+            'slug',
+            'description',
         ]);
 
-       return response()->json([compact('category')], 201);  
+       return response()->json([
+        'data' => $this->categoryRepository->getCategoryById($category),
+       ]);
     }
 
     public function show($id)
     {
-        $category = Category::find($id);
-
-        if(!$category) {
-            return response()->json([], 404);
-        }
-
-        return new CategoryResource($category);
+        return response()->json([
+            'data' => $this->categoryRepository->getCategoryById($id),
+           ]);
     }
 
     public function update(Request $request, $id)
@@ -51,29 +48,21 @@ class CategoryController extends Controller
     {
         $category = Category::find($id);
 
-        if(!$category) {
-            return response()->json([], 400);
-        }
+       $category = request()->only([
+        'name',
+        'slug',
+        'description'
+       ]);
 
-        $category->update([
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'description' => $request->description,
+        return response()->json([
+            'data' => $this->categoryRepository->updateCategory($id, $category)
         ]);
-
-        return response()->json([]);
     }
     
     public function destroy($id)
     {   
-        $category = Category::find($id);
+        $this->orderRepository->deleteOrder($id);
 
-       if(!$category) {
-        return response()->json([
-            '$category' => "No Result for cate$category",
-        ], 400);
-        }
-       return $category->destroy($id);
-        }
+        return response()->json([], 200);
+    }
 }
-
