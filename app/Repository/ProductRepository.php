@@ -8,29 +8,32 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProductRepository implements ProductRepositoryInterface {
 
-    public function getAllOrders() 
+    public function getAllProducts() 
     {
-        return Product::all();
+        $product =Product::orderBy('id', 'desc')->paginate(5);
+        return ProductResource::collection($product);
     }
 
-    public function getOrderById($orderId) 
+    public function getProductById($id) 
     {
-        return Product::findOrFail($orderId);
+        $product =  Product::findOrFail($id);
+        return new ProductResource($product);
     }
 
-    public function deleteOrder($orderId) 
-    {
-        Product::destroy($orderId);
+    public function deleteProduct($id) 
+    {   
+        
+       return Product::destroy($id);
     }
 
-    public function createOrder(array $orderDetails) 
+    public function createProduct(array $products, $category,  array $image,) 
     {
-        return Product::create($orderDetails);
+        return Product::create($products,$image, $category );
     }
 
-    public function updateOrder($orderId, array $newDetails) 
+    public function updateProduct($id, array $products) 
     {
-        return Product::whereId($orderId)->update($newDetails);
+        return Product::whereId($id)->update($products);
     }
 
 }

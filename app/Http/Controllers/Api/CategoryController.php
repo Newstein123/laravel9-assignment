@@ -5,16 +5,23 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Interfaces\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    private CategoryRepositoryInterface $categoryRepository;
 
+    public function __construct(CategoryRepositoryInterface $categoryRepository) 
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
 
     public function index()
     {
-       $category =  Category::orderBy('id', 'desc')->get();
-       return CategoryResource::collection($category);
+       return response()->json([
+        'data' => $this->categoryRepository->getAllCategory(),
+       ]);
     }
 
     public function store(Request $request)
