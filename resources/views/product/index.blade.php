@@ -13,7 +13,7 @@
        
         <div class="card-img-top">
             @foreach ($product->images as $image)
-                <img src="/storage/{{$image->path}}" alt="hello">
+                <img src="{{Storage::url($image->path)}}" alt="hello">
             @endforeach
         </div>
         <div class="card-body"> 
@@ -40,4 +40,4 @@
 @endforeach 
 @endsection
              
-    
+{{ $product->links() }}
